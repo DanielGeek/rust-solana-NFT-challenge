@@ -1,10 +1,10 @@
 use anchor_lang::prelude::*;
 use mpl_token_metadata::{
     instruction::{create_metadata_accounts_v2},
-    state::{Data, Collection}
+    state::{Collection}
 };
 
-declare_id!("HnMfYirf628dbqboAqWRUsWG6tyF7ACURRyb6irV2osG");
+declare_id!("9VuZ3tb1cmjdrkaCDNsPDwgRxadEiqWQgNieY2QVvMvZ");
 
 #[program]
 pub mod rust_solana_nft_challenge {
@@ -13,7 +13,12 @@ pub mod rust_solana_nft_challenge {
     use super::*;
 
     pub fn create_collection(ctx: Context<CreateCollection>, data: Data) -> ProgramResult {
+        msg!("Received data: {:?}", data);
         msg!("Creating collection metadata");
+        if *ctx.accounts.collection_metadata.to_account_info().owner != *ctx.program_id {
+            msg!("Error: Collection metadata account is not owned by this program.");
+            return Err(ProgramError::IllegalOwner);
+        }
         let ix = create_metadata_accounts_v2(
             *ctx.accounts.token_metadata_program.key,
             ctx.accounts.collection_metadata.key(),
@@ -122,4 +127,43 @@ pub struct MintNft<'info> {
     /// input provided by the client, which should ensure that the provided address is correct
     /// and has been verified prior to invoking this program.
     pub collection_mint: AccountInfo<'info>,
+}
+
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, Debug)]
+pub struct Data {
+    pub name: String,
+    pub symbol: String,
+    pub uri: String,
+    pub seller_fee_basis_points: u16,
+    pub creators: Option<Vec<Creator>>,
+    // Additional fields
+    pub collection: Option<CollectionDetails>, // Optional field for collection details
+    pub uses: Option<Uses>, // Optional field for usage details
+}
+
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, Debug)]
+pub struct Creator {
+    pub address: Pubkey,
+    pub verified: bool,
+    pub share: u8,
+}
+
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, Debug)]
+pub struct CollectionDetails {
+    pub verified: bool,
+    pub key: Pubkey,
+}
+
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, Debug)]
+pub struct Uses {
+    pub use_method: UseMethod,
+    pub remaining: u64,
+    pub total: u64,
+}
+
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, Debug)]
+pub enum UseMethod {
+    Burn,
+    Multiple,
+    Single,
 }

@@ -8,15 +8,15 @@ edition = "2021"
 crate-type = ["cdylib", "lib"]
 name = "rust_solana_nft_challenge"
 
+[toolchain]
+anchor_version = "0.24.2"
+
 [features]
+default = []
+cpi = ["no-entrypoint"]
 no-entrypoint = []
 no-idl = []
 no-log-ix-name = []
-cpi = ["no-entrypoint"]
-default = []
-
-[profile.release]
-overflow-checks = true
 
 [dependencies]
 anchor-lang = "0.24.2"

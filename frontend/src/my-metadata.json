@@ -1,0 +1,19 @@
+{
+    "name": "Collection 1",
+    "image": "success.png",
+    "symbol": "CL",
+    "properties": {
+        "creators": [
+            {
+                "address": "9JrSfn4oUafRfBn9u8LVBan9wQVNn9gg2yKVF8aHyenZ",
+                "share": 100
+            }
+        ],
+        "files": [
+            {
+                "uri": "1.png",
+                "type": "image/png"
+            }
+        ]
+    }
+}

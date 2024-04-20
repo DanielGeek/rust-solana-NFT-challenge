@@ -3,5 +3,13 @@
 # Commands
 `npm i`
 `anchor build`
-`anchor deploy`
+# deploy devnet
 `anchor deploy --provider.cluster devnet`
+# deploy localnet
+`solana-test-validator`
+`anchor deploy --provider.cluster localnet`
+
+# frontend
+- path to smart contract conection: frontend/src/App.tsx
+# run frontend
+`npm start`
